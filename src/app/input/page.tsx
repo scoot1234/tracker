@@ -7,6 +7,16 @@ import prisma from '@/lib/db'
 
 export default async function input(){
     const users = await prisma.user.findMany();
+    function subtractMonths(dateString: string | number | Date, monthsToSubtract: number) {
+        const date = new Date(dateString); // Convert the date string to a Date object
+        date.setMonth(date.getMonth() - monthsToSubtract); // Subtract months
+        return date; // Return the adjusted date
+      }
+      
+      // Helper function to format the date as YYYY-MM-DD
+      function formatDate(date: Date) {
+        return date.toLocaleDateString();
+      }
 return(
     <div>
         <Nav/>
@@ -45,7 +55,8 @@ return(
             <th style={{ border: '1px solid black' }} suppressHydrationWarning>{user.orddate
                 ? new Date(user.orddate).toLocaleDateString():''}</th>
                   <th style={{ border: '1px solid black' }} suppressHydrationWarning>{user.orddate
-                ? new Date(user.orddate).toLocaleDateString():''}</th>
+                ? formatDate(subtractMonths(user.orddate, 3)) // Subtract 3 months and format the date
+                : ''}</th>
         </tr>
 ))}
         
